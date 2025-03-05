@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=zigbee2mqtt
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=1.38.0
+PKG_VERSION:=2.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/$(PKG_NPM_NAME)/-/ \
                 https://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_HASH:=d8c0d82f0eeb71ab1a7f683d7d219291734506e6b1b48c011d4512ca2f90381e
+PKG_HASH:=94cf2d635f8d2b2c88015b2cc5091fdfabb41893ac0ba2733f5087262d37c15d
 
 PKG_MAINTAINER:=Hirokazu MORIKAWA <morikw2@gmail.com>
 PKG_LICENSE:=GPL-3.0

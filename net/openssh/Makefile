@@ -8,13 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=9.8p1
+PKG_REALVERSION:=9.9p2
+PKG_VERSION:=9.9_p2
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_REALVERSION).tar.gz
 PKG_SOURCE_URL:=https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
 		https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/
-PKG_HASH:=dd8bd002a379b5d499dfb050dd1fa9af8029e80461f4bb6c523c49973f5a39f3
+PKG_HASH:=91aadb603e08cc285eddf965e1199d02585fa94d994d6cae5b41e1721e215673
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(if $(BUILD_VARIANT),$(PKG_NAME)-$(BUILD_VARIANT)/)$(PKG_NAME)-$(PKG_REALVERSION)
 
 PKG_LICENSE:=BSD ISC
 PKG_LICENSE_FILES:=LICENCE
@@ -182,7 +184,7 @@ CONFIGURE_ARGS += \
 	--with$(if $(CONFIG_OPENSSL_ENGINE),,out)-ssl-engine \
 	--with$(if $(CONFIG_OPENSSH_LIBFIDO2),,out)-security-key-builtin \
 	--with-cflags-after=-fzero-call-used-regs=skip
-	
+
 ifeq ($(BUILD_VARIANT),with-pam)
 CONFIGURE_ARGS += \
 	--with-pam
