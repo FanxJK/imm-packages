@@ -6,13 +6,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=owut
-PKG_SOURCE_DATE:=2025-02-18
+PKG_SOURCE_DATE:=2025-10-24
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=f9fae6b35a9f86db50f9c4941582eb7f48bf4a22
+PKG_SOURCE_VERSION:=07453922aa2ff0d73a9e789d702827a2d08a203f
 PKG_SOURCE_URL:=https://github.com/efahl/owut.git
-PKG_MIRROR_HASH:=bc0056d139c2d1dfe31a86127b11be5622f19ddb4042e96c78387afa344f02f5
+PKG_MIRROR_HASH:=49412860a6ca86eb5485641cdf4b25d64c462e10d99b2c4fdcf0a2214fd1578a
 
 PKG_MAINTAINER:=Eric Fahlgren <ericfahlgren@gmail.com>
 PKG_LICENSE:=GPL-2.0-only
@@ -65,6 +65,7 @@ define Package/owut/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/owut $(1)/usr/bin
 
 	sed -i -e "s/%%VERSION%%/$(PKG_VERSION)-r$(PKG_RELEASE)/" $(1)/usr/bin/owut
+	sed -i -e "s/%%VERSION%%/$(PKG_VERSION)-r$(PKG_RELEASE)/" $(1)/usr/share/ucode/utils/argparse.uc
 endef
 
 $(eval $(call BuildPackage,owut))

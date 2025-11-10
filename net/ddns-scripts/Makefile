@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ddns-scripts
 PKG_VERSION:=2.8.2
-PKG_RELEASE:=65
+PKG_RELEASE:=80
 
 PKG_LICENSE:=GPL-2.0
 
@@ -25,7 +25,7 @@ endef
 define Package/ddns-scripts
   $(call Package/ddns-scripts/Default)
   TITLE:=Dynamic DNS Client scripts (with IPv6 support)
-  DEPENDS:=+ddns-scripts-services
+  DEPENDS:=+ddns-scripts-services +resolveip +ip
 endef
 
 define Package/ddns-scripts/description
@@ -143,6 +143,21 @@ define Package/ddns-scripts-digitalocean/description
   'option password' the api token generated in the DO panel
 endef
 
+define Package/ddns-scripts-ovh
+  $(call Package/ddns-scripts/Default)
+  TITLE:=Extension for OVH Dynhost
+  DEPENDS:=ddns-scripts +curl +openssl-util
+  PROVIDES:=ddns-scripts_ovh-dynhost
+endef
+
+define Package/ddns-scripts-ovh/description
+  Dynamic DNS Client scripts extension for ovh.com DynHost API.
+  The script directly updates a DNS record using the OVH DynHost API.
+  It requires:
+  'option domain' the dns domain to update the record for (eg. A-record: home.<example.com>)
+  'option username' the dynhost user
+  'option password' the dynhost password
+endef
 
 define Package/ddns-scripts-dnspod
   $(call Package/ddns-scripts/Default)
@@ -270,6 +285,20 @@ define Package/ddns-scripts-pdns/description
   'option password' to be a valid API key for the PowerDNS webserver
 endef
 
+define Package/ddns-scripts-scaleway
+  $(call Package/ddns-scripts/Default)
+  TITLE:=Extension for Scaleway DNS API
+  DEPENDS:=ddns-scripts +curl
+endef
+
+define Package/ddns-scripts-scaleway/description
+  Dynamic DNS Client scripts extension for Scaleway.
+  Parameters:
+  'option username'  The zone in which the RR is to be set
+  'option password'  The Scaleway API token with sufficient access rights
+  'option domain'    The domain to be updated
+  'option param_opt' (Optional) The TTL of the RR
+endef
 
 define Package/ddns-scripts-transip
   $(call Package/ddns-scripts/Default)
@@ -294,7 +323,7 @@ define Package/ddns-scripts-one
 	DEPENDS:=ddns-scripts +curl
 endef
 
-define Package/ddns-scrtips-one/description
+define Package/ddns-scripts-one/description
 	Dynamic DNS Client scripts extension for 'one.com'.
 	It requires:
 	'option username' to be a valid Email for one.com Control Panel
@@ -326,6 +355,17 @@ endef
 
 define Package/ddns-scripts-huaweicloud/description
   Dynamic DNS Client scripts extension for huaweicloud.com API (require curl and openssl)
+endef
+
+define Package/ddns-scripts-aliyun
+	$(call Package/ddns-scripts/Default)
+	TITLE:=Extension for Aliyun DNS API
+	DEPENDS:=ddns-scripts +curl +openssl-util
+	PROVIDES:=ddns-scripts_aliyun
+endef
+
+define Package/ddns-scripts-aliyun/description
+	Dynamic DNS Client scripts extension for aliyun.com API
 endef
 
 define Build/Configure
@@ -399,6 +439,7 @@ define Package/ddns-scripts-services/install
 	rm $(1)/usr/share/ddns/default/freedns.42.pl.json
 	rm $(1)/usr/share/ddns/default/godaddy.com-v1.json
 	rm $(1)/usr/share/ddns/default/digitalocean.com-v2.json
+	rm $(1)/usr/share/ddns/default/ovh.com.json
 	rm $(1)/usr/share/ddns/default/dnspod.cn.json
 	rm $(1)/usr/share/ddns/default/dnspod.cn-v3.json
 	rm $(1)/usr/share/ddns/default/no-ip.com.json
@@ -407,11 +448,13 @@ define Package/ddns-scripts-services/install
 	rm $(1)/usr/share/ddns/default/cnkuai.cn.json
 	rm $(1)/usr/share/ddns/default/gandi.net.json
 	rm $(1)/usr/share/ddns/default/pdns.json
+	rm $(1)/usr/share/ddns/default/scaleway.com.json
 	rm $(1)/usr/share/ddns/default/transip.nl.json
 	rm $(1)/usr/share/ddns/default/ns1.com.json
 	rm $(1)/usr/share/ddns/default/one.com.json
 	rm $(1)/usr/share/ddns/default/porkbun.com-v3.json
 	rm $(1)/usr/share/ddns/default/huaweicloud.com.json
+	rm $(1)/usr/share/ddns/default/aliyun.com.json
 endef
 
 
@@ -537,6 +580,23 @@ fi
 exit 0
 endef
 
+define Package/ddns-scripts-ovh/install
+	$(INSTALL_DIR) $(1)/usr/lib/ddns
+	$(INSTALL_BIN) ./files/usr/lib/ddns/update_ovh_com.sh \
+		$(1)/usr/lib/ddns
+
+	$(INSTALL_DIR) $(1)/usr/share/ddns/default
+	$(INSTALL_DATA) ./files/usr/share/ddns/default/ovh.com.json \
+		$(1)/usr/share/ddns/default
+endef
+
+define Package/ddns-scripts-ovh/prerm
+#!/bin/sh
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	/etc/init.d/ddns stop
+fi
+exit 0
+endef
 
 define Package/ddns-scripts-dnspod/install
 	$(INSTALL_DIR) $(1)/usr/lib/ddns
@@ -709,6 +769,25 @@ exit 0
 endef
 
 
+define Package/ddns-scripts-scaleway/install
+	$(INSTALL_DIR) $(1)/usr/lib/ddns
+	$(INSTALL_BIN) ./files/usr/lib/ddns/update_scaleway_com.sh \
+		$(1)/usr/lib/ddns
+
+	$(INSTALL_DIR) $(1)/usr/share/ddns/default
+	$(INSTALL_DATA) ./files/usr/share/ddns/default/scaleway.com.json \
+		$(1)/usr/share/ddns/default
+endef
+
+define Package/ddns-scripts-scaleway/prerm
+#!/bin/sh
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	/etc/init.d/ddns stop
+fi
+exit 0
+endef
+
+
 define Package/ddns-scripts-transip/install
 	$(INSTALL_DIR) $(1)/usr/lib/ddns
 	$(INSTALL_BIN) ./files/usr/lib/ddns/update_transip_nl.sh \
@@ -784,6 +863,24 @@ fi
 exit 0
 endef
 
+define Package/ddns-scripts-aliyun/install
+	$(INSTALL_DIR) $(1)/usr/lib/ddns
+	$(INSTALL_BIN) ./files/usr/lib/ddns/update_aliyun_com.sh \
+		$(1)/usr/lib/ddns
+
+	$(INSTALL_DIR) $(1)/usr/share/ddns/default
+	$(INSTALL_DATA) ./files/usr/share/ddns/default/aliyun.com.json \
+		$(1)/usr/share/ddns/default/
+endef
+
+define Package/ddns-scripts-aliyun/prerm
+#!/bin/sh
+if [ -z "$${IPKG_INSTROOT}" ]; then
+	/etc/init.d/ddns stop
+fi
+exit 0
+endef
+
 
 $(eval $(call BuildPackage,ddns-scripts))
 $(eval $(call BuildPackage,ddns-scripts-services))
@@ -794,6 +891,7 @@ $(eval $(call BuildPackage,ddns-scripts-gcp))
 $(eval $(call BuildPackage,ddns-scripts-freedns))
 $(eval $(call BuildPackage,ddns-scripts-godaddy))
 $(eval $(call BuildPackage,ddns-scripts-digitalocean))
+$(eval $(call BuildPackage,ddns-scripts-ovh))
 $(eval $(call BuildPackage,ddns-scripts-dnspod))
 $(eval $(call BuildPackage,ddns-scripts-dnspod-v3))
 $(eval $(call BuildPackage,ddns-scripts-noip))
@@ -802,8 +900,10 @@ $(eval $(call BuildPackage,ddns-scripts-route53))
 $(eval $(call BuildPackage,ddns-scripts-cnkuai))
 $(eval $(call BuildPackage,ddns-scripts-gandi))
 $(eval $(call BuildPackage,ddns-scripts-pdns))
+$(eval $(call BuildPackage,ddns-scripts-scaleway))
 $(eval $(call BuildPackage,ddns-scripts-transip))
 $(eval $(call BuildPackage,ddns-scripts-ns1))
 $(eval $(call BuildPackage,ddns-scripts-one))
 $(eval $(call BuildPackage,ddns-scripts-porkbun))
 $(eval $(call BuildPackage,ddns-scripts-huaweicloud))
+$(eval $(call BuildPackage,ddns-scripts-aliyun))

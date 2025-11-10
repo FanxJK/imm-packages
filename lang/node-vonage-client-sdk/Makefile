@@ -7,13 +7,14 @@ include $(TOPDIR)/rules.mk
 PKG_NPM_SCOPE:=vonage
 PKG_NPM_NAME:=client-sdk
 PKG_NAME:=node-$(PKG_NPM_SCOPE)-$(PKG_NPM_NAME)
-PKG_VERSION:=2.0.0
+PKG_VERSION:=2.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_SCOPE)-$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL_FILE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=https://registry.npmjs.org/@$(PKG_NPM_SCOPE)/$(PKG_NPM_NAME)/-/
-PKG_HASH:=cbd9b606bc377fa18c9b6299c7c71080e8c7accd83205b8a7714fe6232c51baa
+PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/@$(PKG_NPM_SCOPE)/$(PKG_NPM_NAME)/-/ \
+                https://registry.npmjs.org/@$(PKG_NPM_SCOPE)/$(PKG_NPM_NAME)/-/
+PKG_HASH:=962882d74a3aa131d87f98b54a3fd56a3737c28c1724ad328903cf2450c69a5b
 
 PKG_MAINTAINER:=Hirokazu MORIKAWA <morikw2@gmail.com>
 PKG_LICENSE:=SEE LICENSE IN LICENSE

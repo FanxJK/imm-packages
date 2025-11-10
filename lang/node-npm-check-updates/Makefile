@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=npm-check-updates
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=17.1.14
+PKG_VERSION:=19.1.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/$(PKG_NPM_NAME)/-/ \
                 https://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_HASH:=4d6d8f73aeb7fb7db28bec3640bf70e0bb8ed190ae6bc1bb40337c431e28b44c
+PKG_HASH:=2f8f44e5f163a87e5a6912d301538bc57713066543140ff4f340e184fe348648
 
 PKG_MAINTAINER:=Hirokazu MORIKAWA <morikw2@gmail.com>, Patrik Laszlo <alabard@gmail.com>
 PKG_LICENSE:=Apache-2.0
@@ -55,8 +55,8 @@ define Build/Compile
 	$(if $(CONFIG_NODEJS_NPM_KEEP_CACHE), npm_config_cache=$(NPM_CACHE_DIR)/npm-cache-$(PKG_NPM_NAME),npm_config_cache=$(TMP_DIR)/npm-cache-$(TMPNPM)) \
 	npm install --prefer-offline --no-audit --global-style --install-strategy=shallow --no-save --omit=dev --no-package-lock --legacy-peer-deps --ignore-scripts
 	rm -rf $(TMP_DIR)/npm-cache-$(TMPNPM)
-	rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
-	find $(PKG_BUILD_DIR)/node_modules -type d -empty -print0 | xargs -0 -r rmdir || true
+	#rm -f $(PKG_BUILD_DIR)/node_modules/.package-lock.json
+	#find $(PKG_BUILD_DIR)/node_modules -type d -empty -print0 | xargs -0 -r rmdir || true
 endef
 
 define Package/node-npm-check-updates/install
@@ -65,7 +65,7 @@ define Package/node-npm-check-updates/install
 		$(1)/usr/lib/node/$(PKG_NPM_NAME)/
 	$(CP) $(PKG_BUILD_DIR)/LICENSE \
 		$(1)/usr/lib/node/$(PKG_NPM_NAME)/
-	$(CP) $(PKG_BUILD_DIR)/{node_modules,build} \
+	$(CP) $(PKG_BUILD_DIR)/build \
 		$(1)/usr/lib/node/$(PKG_NPM_NAME)/
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(LN) ../lib/node/$(PKG_NPM_NAME)/build/cli.js $(1)/usr/bin/npm-check-updates

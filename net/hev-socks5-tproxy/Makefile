@@ -1,14 +1,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hev-socks5-tproxy
-PKG_VERSION:=2.6.0
+PKG_VERSION:=2.10.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=https://github.com/heiher/hev-socks5-tproxy/releases/download/$(PKG_VERSION)
-PKG_HASH:=31751059743eb98c5ca671b7405a918019f435f11fe9b9ca00c8b78075cf9744
+PKG_HASH:=4f495a7393afe4b4d36f86e94faddf992def010ff67c02e8ce09693a3a1bd20d
 
-PKG_MAINTAINER:=Ray Wang <r@hev.cc>
+PKG_MAINTAINER:=Ray Wang <git@hev.cc>
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=License
 

@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=aws-crt
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=1.21.3
+PKG_VERSION:=1.27.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/$(PKG_NPM_NAME)/-/ \
                 https://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_HASH:=482905eebf086f7dfa5a9d75ca0b6128d0de01ffe6a99daef8136b52a7d346dd
+PKG_HASH:=872fae8b98e6aaf8f4e98220461fd76f2ed45e2205c969d6a05d9dc1f037ca45
 
 PKG_MAINTAINER:=Hirokazu MORIKAWA <morikw2@gmail.com>
 PKG_LICENSE:=Apache-2.0

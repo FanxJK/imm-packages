@@ -1,13 +1,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=antiblock
-PKG_VERSION:=2.0.2
-PKG_RELEASE:=1
+PKG_VERSION:=2.1.2
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/karen07/antiblock
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_MIRROR_HASH:=00d9d50d12bdb3d3ec6ddefe0b3ea254433a1d58867b0fae87a12dd24ec1ba87
+PKG_MIRROR_HASH:=18b04ab99744160e91d032edc55bb171a9717cdd200a494d7af9fa3c9f0fdb48
 
 PKG_MAINTAINER:=Khachatryan Karen <karen0734@gmail.com>
 PKG_LICENSE:=GPL-3.0-or-later
@@ -19,20 +19,22 @@ include $(INCLUDE_DIR)/cmake.mk
 define Package/antiblock
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libcurl
+  DEPENDS:=+libcurl +libpcap
   TITLE:=AntiBlock
   URL:=https://github.com/karen07/antiblock
 endef
 
 define Package/antiblock/description
-  AntiBlock program proxies DNS requests.
-  The IP addresses of the specified domains are added to
-  the routing table for routing through the specified interface.
+  AntiBlock sniffer DNS requests. The IP addresses of the
+  specified domains are added to the routing table for
+  routing through the specified interfaces.
 endef
 
 define Package/antiblock/conffiles
 /etc/config/antiblock
 endef
+
+CMAKE_OPTIONS += -DCLANGFORMAT=""
 
 define Package/antiblock/install
 	$(INSTALL_DIR) $(1)/usr/bin

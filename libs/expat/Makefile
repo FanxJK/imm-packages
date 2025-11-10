@@ -6,14 +6,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=expat
-PKG_VERSION:=2.6.3
+PKG_VERSION:=2.7.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(PKG_VERSION))
-PKG_HASH:=17aa6cfc5c4c219c09287abfc10bc13f0c06f30bb654b28bfe6f567ca646eb79
+PKG_HASH:=821ac9710d2c073eaf13e1b1895a9c9aa66c1157a99635c639fbff65cdbdd732
 
-PKG_MAINTAINER:=Ted Hess <thess@kitschensync.net>
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=COPYING
 PKG_CPE_ID:=cpe:/a:libexpat_project:libexpat

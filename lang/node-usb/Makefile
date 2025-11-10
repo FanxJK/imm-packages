@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=usb
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=2.14.0
+PKG_VERSION:=2.16.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/$(PKG_NPM_NAME)/-/ \
                 https://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_HASH:=a77193c010e0698ee2ec27d0a069c125eab23ae6dfffb5ab558f6a2258294f17
+PKG_HASH:=b7c7af7e3b285a613689a0a0f98cd303c22d3fa7bab51e61c40f5ffe547514b7
 
 PKG_MAINTAINER:=Hirokazu MORIKAWA <morikw2@gmail.com>
 PKG_LICENSE:=MIT

@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=zwave-js-ui
 PKG_NAME:=node-$(PKG_NPM_NAME)
-PKG_VERSION:=9.30.1
+PKG_VERSION:=11.3.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/$(PKG_NPM_NAME)/-/ \
                 https://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_HASH:=7a1e8aff52ee0716a68d38e08c501f6d832724ce324fda3bee235e46da5698ff
+PKG_HASH:=9002324f6659fd633e3cb8d19c306d6b6161c02f4050104d68bd995e4ad6a9c5
 
 PKG_MAINTAINER:=David Woodhouse <dwmw2@infradead.org>
 PKG_LICENSE:=MIT
@@ -72,6 +72,7 @@ define Build/Compile
 	rm -rf $(PKG_BUILD_DIR)/node_modules/@zwave-js/core/build/cjs/test/*.ts
 	rm -rf $(PKG_BUILD_DIR)/node_modules/@zwave-js/core/build/cjs/test/*.map
 	clean-modules -y -D $(PKG_BUILD_DIR)/node_modules "!**/*.png" "!**/@zwave-js/core/build/cjs/test/" \
+		"!**/@zwave-js/**/esm/" "!**/@zwave-js/core/build/esm/test/" \
 		"**/*.d.ts" "**/@types/**" "**/obj.target/" "**/config.gypi" \
 		"**/.nvmrc" "**/.devcontainer/" "**/.bowerrc" "**/.airtap.yml" "**/.test/" \
 		"**/.notags" "**/.releaserc" "**/.dprint.jsonc" "**/.eslintrc" "**/locales/" \

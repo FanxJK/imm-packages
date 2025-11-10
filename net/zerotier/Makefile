@@ -6,12 +6,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zerotier
-PKG_VERSION:=1.14.1
-PKG_RELEASE:=1
+PKG_VERSION:=1.16.0
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/zerotier/ZeroTierOne/tar.gz/$(PKG_VERSION)?
-PKG_HASH:=4f9f40b27c5a78389ed3f3216c850921f6298749e5819e9f2edabb2672ce9ca0
+PKG_HASH:=aa9de313d365bf0efb3871aaa56f2d323a08f46df47b627c4eff4f4203fa7fc5
 PKG_BUILD_DIR:=$(BUILD_DIR)/ZeroTierOne-$(PKG_VERSION)
 
 PKG_MAINTAINER:=Moritz Warning <moritzwarning@web.de>
@@ -62,9 +62,14 @@ endef
 TARGET_CFLAGS += -Wl,-z,noexecstack
 TARGET_LDFLAGS += -Wl,--as-needed -Wl,-z,noexecstack
 
-#define Package/zerotier/conffiles
-#/etc/config/zerotier
-#endef
+# Prevent `-isystem ext` from causing the wrong miniupnpc header to be used (OpenWrt packages issue - 18019)
+TARGET_CFLAGS += -isystem $(STAGING_DIR)/usr/include
+
+define Package/zerotier/conffiles
+/etc/config/zerotier
+/etc/zerotier.conf
+/etc/zerotier
+endef
 
 define Package/zerotier/install
 	$(INSTALL_DIR) $(1)/usr/bin
@@ -76,7 +81,7 @@ define Package/zerotier/install
 ifeq ($(CONFIG_ZEROTIER_ENABLE_SELFTEST),y)
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/zerotier-selftest $(1)/usr/bin/
 endif
-	#$(CP) ./files/* $(1)/
+	$(CP) ./files/* $(1)/
 endef
 
 $(eval $(call BuildPackage,zerotier))

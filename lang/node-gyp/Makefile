@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NPM_NAME:=node-gyp
 PKG_NAME:=$(PKG_NPM_NAME)
-PKG_VERSION:=11.0.0
+PKG_VERSION:=11.5.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NPM_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=https://mirrors.tencent.com/npm/$(PKG_NPM_NAME)/-/ \
                 https://registry.npmjs.org/$(PKG_NPM_NAME)/-/
-PKG_HASH:=7f83a67583063a9bbe34f89c6fa34e55f1d92896edfb7667a3be4443ddab8583
+PKG_HASH:=d5d805d43a57bf3e526627e1abaf0382f488a46959a5aeaf147b0c183c37b3da
 
 PKG_MAINTAINER:=Hirokazu MORIKAWA <morikw2@gmail.com>
 PKG_LICENSE:=MIT

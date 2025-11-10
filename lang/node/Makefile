@@ -7,36 +7,27 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=node
 
 ifeq ($(CONFIG_NODEJS_20),y)
-PKG_VERSION:=20.18.3
+PKG_VERSION:=20.19.5
 PKG_RELEASE:=1
-PKG_HASH:=eba088fa562735140b283c7bb33f53e026ccd5febe68c52c5737ef6e577ec874
+PKG_HASH:=b34d3f57666d91deb6a148b604d7f2f4051d540087e9f6c627dedc1fcb866d5a
 PATCH_DIR:=./patches/v20.x
-NODEJS_BIN_SUM:=9fc3952da39b20d1fcfdb777b198cc035485afbbb1004b4df93f35245d61151e
+NODEJS_BIN_SUM:=4eba5fbe1fb10753bc06e42f001a91c5cec16798b7764a3e9257adc59af47fe1
 NODE_MODULE_VERSION:=115
 else
-ifeq ($(CONFIG_NODEJS_18),y)
-PKG_VERSION:=18.20.7
+ifeq ($(CONFIG_NODEJS_24),y)
+PKG_VERSION:=24.10.0
 PKG_RELEASE:=1
-PKG_HASH:=f2f2f1ac616d8e253ed69cf0b44de7d4843c40d8a614f64c776ee59ff0047031
-PATCH_DIR:=./patches/v18.x
-NODEJS_BIN_SUM:=ca593cc143875d33b257ab45ae629a02485333e8096221c44ef62c99678aa7fc
-NODE_MODULE_VERSION:=108
+PKG_HASH:=fb9aa1938aa8d7b53e437184e4c5b26823db0afb5ac1cbfe6559176531e900e6
+PATCH_DIR:=./patches/v24.x
+NODEJS_BIN_SUM:=2b03c5417ce0b1076780df00e01da373bead3b4b80d1c78c1ad10ee7b918d90c
+NODE_MODULE_VERSION:=137
 else
-ifeq ($(CONFIG_NODEJS_23),y)
-PKG_VERSION:=23.9.0
+PKG_VERSION:=22.21.0
 PKG_RELEASE:=1
-PKG_HASH:=164ec8fe82aac21f74efc0d5890d9f6c0e0ba22ca285d400c0266913fb4ff8a0
-PATCH_DIR:=./patches/v23.x
-NODEJS_BIN_SUM:=bb1a81335c86578e70ee282eb9f93c5aa2e75f7cb6b99d9315a52899d42884f9
-NODE_MODULE_VERSION:=131
-else
-PKG_VERSION:=22.14.0
-PKG_RELEASE:=1
-PKG_HASH:=6c4e31ed5702dc45cfd8c435af56a36a474427e1bd7afe74c346136060beba8a
+PKG_HASH:=3ada9d465cd6557b7b0ccea5f785278931a2a319bc941f68b2e742c6883f18ad
 PATCH_DIR:=./patches/v22.x
-NODEJS_BIN_SUM:=9d942932535988091034dc94cc5f42b6dc8784d6366df3a36c4c9ccb3996f0c2
+NODEJS_BIN_SUM:=262b84b02f7e2bc017d4bdb81fec85ca0d6190a5cd0781d2d6e84317c08871f8
 NODE_MODULE_VERSION:=127
-endif
 endif
 endif
 
@@ -68,7 +59,7 @@ define Package/node
   SUBMENU:=Node.js
   TITLE:=Node.js is a platform built on Chrome's JavaScript runtime
   URL:=https://nodejs.org/
-  DEPENDS:=@HAS_FPU @(i386||x86_64||arm||aarch64) \
+  DEPENDS:=@HAS_FPU @(i386||x86_64||arm||aarch64||riscv64) \
 	   +libstdcpp +libopenssl +zlib +libnghttp2 \
 	   +libcares +libatomic +NODEJS_ICU_SYSTEM:icu +NODEJS_ICU_SYSTEM:icu-full-data
   ABI_VERSION:=$(NODE_MODULE_VERSION)
@@ -80,7 +71,7 @@ define Package/node/description
    package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 
   *** The following preparations must be made on the host side. ***
-      1. gcc 10.1 or higher is required.
+      1. gcc 12.2 or higher is required.
       2. To build a 32-bit target, gcc-multilib, g++-multilib are required.
       3. Requires libatomic package. (If necessary, install the 32-bit library at the same time.)
      ex) sudo apt-get install gcc-multilib g++-multilib
@@ -104,13 +95,10 @@ define Package/node/config
 
 	choice
 		prompt "Version Selection"
-		default NODEJS_20
+		default NODEJS_22
 		help
 		 Select node.js version.
 		 The host package version is also the same.
-
-		config NODEJS_18
-			bool "18.x Maintenance LTS"
 
 		config NODEJS_20
 			bool "20.x Maintenance LTS"
@@ -118,8 +106,8 @@ define Package/node/config
 		config NODEJS_22
 			bool "22.x Active LTS"
 
-		config NODEJS_23
-			bool "23.x Current"
+		config NODEJS_24
+			bool "24.x Current"
 	endchoice
 
 	if PACKAGE_node
@@ -178,7 +166,7 @@ MAKE_VARS+= \
 HOST_MAKE_VARS+=NO_LOAD='cctest.target.mk embedtest.target.mk overlapped-checker.target.mk'
 
 CONFIGURE_VARS:= \
-	CC="$(TARGET_CC) $(TARGET_OPTIMIZATION)" \
+	CC="$(TARGET_CC) $(TARGET_OPTIMIZATION) -flax-vector-conversions" \
 	CXX="$(TARGET_CXX) $(TARGET_OPTIMIZATION)" \
 	CC_host="$(HOSTCC) $(FORCE_32BIT)" \
 	CXX_host="$(HOSTCXX) $(FORCE_32BIT)"
